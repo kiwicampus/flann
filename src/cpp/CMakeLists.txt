@@ -38,6 +38,7 @@ if (BUILD_CUDA_LIB)
     endif()
     cuda_add_library(flann_cuda_s STATIC ${CU_SOURCES})
     set_property(TARGET flann_cuda_s PROPERTY COMPILE_DEFINITIONS FLANN_STATIC)
+    set_property(TARGET flann_cuda_s PROPERTY CUDA_ARCHITECTURES "72;86")
     if (CMAKE_BUILD_STATIC_LIBS)
         list(APPEND flann_install_targets flann_cuda_s)
     else()
@@ -64,6 +65,7 @@ if (BUILD_CUDA_LIB)
        SOVERSION ${FLANN_SOVERSION}
        DEFINE_SYMBOL FLANN_EXPORTS
     )
+    set_property(TARGET flann_cuda PROPERTY CUDA_ARCHITECTURES "72;86")
 endif()
 
 

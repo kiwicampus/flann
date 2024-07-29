@@ -1,11 +1,14 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.5)
 
 if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
+enable_language(CUDA)
 
 project(flann)
 string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
+
+find_package(ament_cmake REQUIRED)
 
 include(${PROJECT_SOURCE_DIR}/cmake/flann_utils.cmake)
 set(FLANN_VERSION 1.9.2)
@@ -28,7 +31,7 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 # Add an "uninstall" target
 CONFIGURE_FILE ("${PROJECT_SOURCE_DIR}/cmake/uninstall_target.cmake.in"
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake" IMMEDIATE @ONLY)
-ADD_CUSTOM_TARGET (uninstall "${CMAKE_COMMAND}" -P
+ADD_CUSTOM_TARGET (uninstall_flann "${CMAKE_COMMAND}" -P
     "${PROJECT_BINARY_DIR}/uninstall_target.cmake")
 
 # Set the build type.  Options are:
@@ -50,13 +53,13 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 # set output path for tests
 set(TEST_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/test)
 
-option(BUILD_C_BINDINGS "Build C bindings" ON)
-option(BUILD_PYTHON_BINDINGS "Build Python bindings" ON)
-option(BUILD_MATLAB_BINDINGS "Build Matlab bindings" ON)
-option(BUILD_CUDA_LIB "Build CUDA library" OFF)
-option(BUILD_EXAMPLES "Build examples" ON)
-option(BUILD_TESTS "Build tests" ON)
-option(BUILD_DOC "Build documentation" ON)
+option(BUILD_C_BINDINGS "Build C bindings" OFF)
+option(BUILD_PYTHON_BINDINGS "Build Python bindings" OFF)
+option(BUILD_MATLAB_BINDINGS "Build Matlab bindings" OFF)
+option(BUILD_CUDA_LIB "Build CUDA library" ON)
+option(BUILD_EXAMPLES "Build examples" OFF)
+option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_DOC "Build documentation" OFF)
 option(USE_OPENMP "Use OpenMP multi-threading" ON)
 option(USE_MPI "Use MPI" OFF)
 
@@ -137,7 +140,6 @@ endif()
 
 # CUDA support
 if (BUILD_CUDA_LIB)
-    find_package(CUDA)
     if (CUDA_FOUND)
         message(STATUS "CUDA found (include: ${CUDA_INCLUDE_DIRS}, lib: ${CUDA_LIBRARIES})")
         include_directories(${CUDA_INCLUDE_DIRS})
@@ -270,3 +272,7 @@ message(STATUS "Building matlab bindings: ${BUILD_MATLAB_BINDINGS}")
 message(STATUS "Building CUDA library: ${BUILD_CUDA_LIB}")
 message(STATUS "Using OpenMP support: ${USE_OPENMP}")
 message(STATUS "Using MPI support: ${USE_MPI}")
+
+ament_export_include_directories(include)
+
+ament_package()
