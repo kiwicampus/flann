@@ -218,6 +218,7 @@ install(
 )
 # Config
 #   * <prefix>/lib/cmake/flann/flann-targets.cmake
+ament_export_targets(${targets_export_name} HAS_LIBRARY_TARGET)
 install(
     EXPORT "${targets_export_name}"
     NAMESPACE "${namespace}"
