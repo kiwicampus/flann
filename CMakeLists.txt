@@ -8,6 +8,12 @@ project(flann)
 enable_language(CUDA)
 string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 find_package(ament_cmake REQUIRED)
 
 include(${PROJECT_SOURCE_DIR}/cmake/flann_utils.cmake)
